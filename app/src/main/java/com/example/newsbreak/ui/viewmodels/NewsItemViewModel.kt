@@ -17,19 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsItemViewModel @Inject constructor(private val newsListFactory: NewsListFactory) :
     ViewModel() {
-
-    private val _isSaved = MutableStateFlow(false)
-    val isSaved = _isSaved.asStateFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = false,
-        )
-
-    fun initSavedStatus(newsItem: NewsItem) {
-        _isSaved.value = newsItem.isSaved
-    }
-
     fun parseTime(date: String): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime
@@ -56,7 +43,6 @@ class NewsItemViewModel @Inject constructor(private val newsListFactory: NewsLis
 
     private fun changeSavedStatus(newsItem: NewsItem) {
         newsItem.isSaved = !newsItem.isSaved
-        _isSaved.value = newsItem.isSaved
     }
 
 }

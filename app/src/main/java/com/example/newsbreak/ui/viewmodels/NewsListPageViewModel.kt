@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import com.example.newsbreak.data.models.NewsItem
 import com.example.newsbreak.data.network.NewsListFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class NewsListPageViewModel @Inject constructor(private val newsListFactory: NewsListFactory) :
     ViewModel() {

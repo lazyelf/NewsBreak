@@ -23,6 +23,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +53,11 @@ fun NewsItemView(
 ) {
     val uriHandler = LocalUriHandler.current
     val coroutineScope = CoroutineScope(Job())
+    val context = LocalContext.current
+
+    val contextAction =
+        if (newsItem.isSaved) "Save To Favorites"
+        else "Delete From Favorites"
 
     Box(
         Modifier
@@ -64,20 +73,21 @@ fun NewsItemView(
                 .fillMaxSize()
                 .combinedClickable(
                     enabled = true,
-                    onClick = { },
+                    onClick = {
+                        Toast
+                            .makeText(
+                                context,
+                                "Long Click to $contextAction or Arrow Click to explore more",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    },
                     onLongClick = {
-                        if (newsItem.isSaved)
-                            coroutineScope.launch {
-                                viewModel.deleteContextAction(newsItem)
-                            }
-                        else {
-                            coroutineScope.launch {
-                                viewModel.saveContextAction(newsItem)
-                            }
+                        coroutineScope.launch {
+                            if (newsItem.isSaved) viewModel.deleteContextAction(newsItem)
+                            else viewModel.saveContextAction(newsItem)
                         }
                     },
-                    onLongClickLabel = if (newsItem.isSaved) "Save to fav"
-                    else "Delete from fav"
+                    onLongClickLabel = contextAction
                 ),
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
