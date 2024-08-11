@@ -12,17 +12,16 @@ import javax.inject.Inject
 
 class NewsRepository @Inject constructor(private val api: NewsApi) : INewsRepository,
     BaseRepository() {
+
     private val pageSize = 12
-    override fun getNewsList(search: String): Flow<PagingData<NewsItem>> {
-        return Pager(
+
+    override fun getNewsList(search: String): Flow<PagingData<NewsItem>> =
+        Pager(
             PagingConfig(
                 pageSize = pageSize,
+                prefetchDistance = 10,
                 enablePlaceholders = false,
-            )
-        ) {
-            NewsDataSource(api, search)
-        }.flow
-    }
-
+            ))
+    { NewsDataSource(api, search) }.flow
 
 }

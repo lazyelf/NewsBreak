@@ -101,8 +101,6 @@ fun NewsItemView(
                     contentScale = ContentScale.FillWidth
                 )
             }
-            DropDownMenu()
-
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -186,32 +184,6 @@ fun NewsItemContent(
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
-@Composable
-fun DropDownMenu() {
-    val context = LocalContext.current
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentSize(Alignment.TopEnd)
-    ) {
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text("Load") },
-                onClick = { Toast.makeText(context, "Load", Toast.LENGTH_SHORT).show() }
-            )
-            DropdownMenuItem(
-                text = { Text("Save") },
-                onClick = { Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show() }
             )
         }
     }
