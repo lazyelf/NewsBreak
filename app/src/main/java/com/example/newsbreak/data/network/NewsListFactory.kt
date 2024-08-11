@@ -19,7 +19,7 @@ class NewsListFactory @Inject constructor(
         return savedNewsRepository.add(newsItem)
     }
 
-    suspend fun deleteNewsItem(newsItem: NewsItem) {
+    fun deleteNewsItem(newsItem: NewsItem) {
         return savedNewsRepository.delete(newsItem)
     }
 

@@ -41,13 +41,3 @@ fun ErrorView(retryFunction: () -> Unit) {
         }
     }
 }
-
-@Composable
-fun Loader() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        CircularProgressIndicator()
-    }
-}
