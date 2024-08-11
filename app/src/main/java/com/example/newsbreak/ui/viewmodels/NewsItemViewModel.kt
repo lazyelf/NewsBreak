@@ -44,7 +44,7 @@ class NewsItemViewModel @Inject constructor(private val newsListFactory: NewsLis
         }
     }
 
-    suspend fun deleteContextAction(newsItem: NewsItem) {
+    fun deleteContextAction(newsItem: NewsItem) {
         changeSavedStatus(newsItem)
         newsListFactory.deleteNewsItem(newsItem)
     }

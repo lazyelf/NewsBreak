@@ -25,8 +25,8 @@ import com.example.newsbreak.ui.viewmodels.NewsListPageViewModel
 import com.example.newsbreak.ui.views.SearchBarView
 
 sealed class Page(var route: String, val icon: ImageVector?, var title: String) {
-    object Home : Page("Home", Icons.Default.Home, "Home")
-    object Saved : Page("Saved", Icons.Default.Favorite, "Saved")
+    data object Home : Page("Home", Icons.Default.Home, "Home")
+    data object Saved : Page("Saved", Icons.Default.Favorite, "Saved")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

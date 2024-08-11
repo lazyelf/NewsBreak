@@ -9,7 +9,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.newsbreak.data.local.dao.NewsItemDao
 import com.example.newsbreak.data.models.NewsItem
 
-
 @Database(entities = [NewsItem::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun newsItemDao(): NewsItemDao
@@ -17,7 +16,9 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var instance: AppDatabase? = null
+
         private val LOCK = Any()
+
         operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
             createDatabase(context).also {
                 it.also { instance = it }

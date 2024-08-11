@@ -5,8 +5,7 @@ import com.example.newsbreak.data.local.repositories.interfaces.ISavedNewsReposi
 import com.example.newsbreak.data.models.NewsItem
 import javax.inject.Inject
 
-class SavedNewsRepository @Inject constructor(private val db: AppDatabase) : SavedBaseRepository(),
-    ISavedNewsRepository {
+class SavedNewsRepository @Inject constructor(private val db: AppDatabase) : ISavedNewsRepository {
 
     override suspend fun add(newsItem: NewsItem) = db.newsItemDao().insert(newsItem)
 

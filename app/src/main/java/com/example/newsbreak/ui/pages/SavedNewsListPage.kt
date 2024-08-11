@@ -1,4 +1,4 @@
-package com.example.newsbreak.ui.pages;
+package com.example.newsbreak.ui.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
@@ -6,7 +6,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsbreak.ui.viewmodels.NewsListPageViewModel
 import com.example.newsbreak.ui.views.NewsItemView
 
