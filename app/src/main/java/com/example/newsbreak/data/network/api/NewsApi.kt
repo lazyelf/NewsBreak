@@ -6,15 +6,15 @@ import retrofit2.http.Query
 
 interface NewsApi {
 
-        @GET("top-headlines")
-        suspend fun getNewsList(
-                @Query("page") page: Int? = null,
-                @Query("country") country: String = "ua"
-                ): NewsListApiResponse
+    @GET("top-headlines")
+    suspend fun getNewsList(
+        @Query("page") page: Int? = null,
+        @Query("country") country: String = "ua"
+    ): NewsListApiResponse
 
-        @GET("everything")
-        suspend fun getSearchResults(
-                @Query("page") page: Int? = null,
-                @Query("q") query: String = "default"
-        ): NewsListApiResponse
+    @GET("everything")
+    suspend fun getSearchResults(
+        @Query("page") page: Int? = null,
+        @Query("q") query: String = "default"
+    ): NewsListApiResponse
 }

@@ -1,7 +1,6 @@
 package com.example.newsbreak.data
 
 import android.app.Application
-import androidx.room.Room
 import com.example.newsbreak.data.local.database.AppDatabase
 import com.example.newsbreak.data.network.BASE_URL
 import com.example.newsbreak.data.network.CACHE_NAME
@@ -86,10 +85,6 @@ object DataModule {
     @Provides
     @Singleton
     fun provideDatabase(app: Application): AppDatabase {
-        return Room.databaseBuilder(
-            app.applicationContext,
-            AppDatabase::class.java, "database-name"
-        ).build()
-
+        return AppDatabase.invoke(app.applicationContext)
     }
 }

@@ -1,49 +1,61 @@
 package com.example.newsbreak.ui.views
 
+import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.newsbreak.R
 import com.example.newsbreak.data.models.NewsItem
 import com.example.newsbreak.ui.viewmodels.NewsItemViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NewsItemView(newsItem: NewsItem, viewModel: NewsItemViewModel = hiltViewModel()) {
-
+fun NewsItemView(
+    newsItem: NewsItem,
+    viewModel: NewsItemViewModel = hiltViewModel()
+) {
     val uriHandler = LocalUriHandler.current
+    val coroutineScope = CoroutineScope(Job())
 
     Box(
         Modifier
@@ -56,7 +68,24 @@ fun NewsItemView(newsItem: NewsItem, viewModel: NewsItemViewModel = hiltViewMode
         Column(
             Modifier
                 .padding(10.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .combinedClickable(
+                    enabled = true,
+                    onClick = { },
+                    onLongClick = {
+                        if (newsItem.isSaved)
+                            coroutineScope.launch {
+                                viewModel.deleteContextAction(newsItem)
+                            }
+                        else {
+                            coroutineScope.launch {
+                                viewModel.saveContextAction(newsItem)
+                            }
+                        }
+                    },
+                    onLongClickLabel = if (newsItem.isSaved) "Save to fav"
+                    else "Delete from fav"
+                ),
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             if (newsItem.urlToImage != null) {
@@ -72,8 +101,9 @@ fun NewsItemView(newsItem: NewsItem, viewModel: NewsItemViewModel = hiltViewMode
                     contentScale = ContentScale.FillWidth
                 )
             }
+            DropDownMenu()
 
-            Row (
+            Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
@@ -84,8 +114,10 @@ fun NewsItemView(newsItem: NewsItem, viewModel: NewsItemViewModel = hiltViewMode
                         .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
+                    val icon = if (newsItem.isSaved) Icons.Rounded.Favorite
+                    else Icons.Rounded.FavoriteBorder
                     Icon(
-                        Icons.Rounded.FavoriteBorder,
+                        icon,
                         contentDescription = "Save",
                         modifier = Modifier.size(30.dp),
                         tint = MaterialTheme.colorScheme.onSecondaryContainer
@@ -124,9 +156,9 @@ fun NewsItemContent(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Row (
+        Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp)
-        ){
+        ) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = newsItem.title,
@@ -157,5 +189,30 @@ fun NewsItemContent(
             )
         }
     }
+}
 
+@Composable
+fun DropDownMenu() {
+    val context = LocalContext.current
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentSize(Alignment.TopEnd)
+    ) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Load") },
+                onClick = { Toast.makeText(context, "Load", Toast.LENGTH_SHORT).show() }
+            )
+            DropdownMenuItem(
+                text = { Text("Save") },
+                onClick = { Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show() }
+            )
+        }
+    }
 }

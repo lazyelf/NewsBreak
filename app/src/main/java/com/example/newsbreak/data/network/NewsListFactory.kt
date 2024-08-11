@@ -23,7 +23,7 @@ class NewsListFactory @Inject constructor(
         return savedNewsRepository.delete(newsItem)
     }
 
-    fun getSavedNewsItem() : List<NewsItem> {
+    fun getSavedNewsItem(): Flow<List<NewsItem>> {
         return savedNewsRepository.getAll()
     }
 

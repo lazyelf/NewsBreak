@@ -2,12 +2,13 @@ package com.example.newsbreak.data.network.datasources
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.newsbreak.data.models.NewsItem
 import com.example.newsbreak.data.network.FIRST_PAGE
 import com.example.newsbreak.data.network.api.NewsApi
-import com.example.newsbreak.data.models.NewsItem
 import java.io.IOException
 
-class NewsDataSource(private val api: NewsApi, private val search: String) : PagingSource<Int, NewsItem>() {
+class NewsDataSource(private val api: NewsApi, private val search: String) :
+    PagingSource<Int, NewsItem>() {
 
     override fun getRefreshKey(state: PagingState<Int, NewsItem>): Int? {
         return state.anchorPosition

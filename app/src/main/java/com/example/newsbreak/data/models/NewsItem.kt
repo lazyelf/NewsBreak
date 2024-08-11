@@ -15,5 +15,6 @@ data class NewsItem(
     @ColumnInfo(name = "url_to_image") val urlToImage: String?,
     @ColumnInfo(name = "published_at") val publishedAt: String,
     @ColumnInfo(name = "content") val content: String?,
-    @Embedded(prefix = "source") val source: NewsSource
+    @Embedded(prefix = "source") val source: NewsSource,
+    @ColumnInfo(name = "is_saved") var isSaved: Boolean = false
 )
