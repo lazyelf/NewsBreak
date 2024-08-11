@@ -3,6 +3,8 @@ package com.example.newsbreak.ui.pages
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -21,14 +23,11 @@ fun NewsListPage(viewModel: NewsListPageViewModel = hiltViewModel()) {
 
     LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
 
-        items(
-            count = lazyNewsItems.itemCount,
-            key = { index -> lazyNewsItems[index].hashCode() },
+        items(count = lazyNewsItems.itemCount,
             itemContent = { index ->
                 lazyNewsItems[index]?.let { newsItem ->
                     NewsItemView(newsItem)
                 }
-            }
-        )
+            })
     }
 }

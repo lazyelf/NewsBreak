@@ -1,5 +1,7 @@
 package com.example.newsbreak.ui.viewmodels
 
+import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -8,13 +10,14 @@ import com.example.newsbreak.data.models.NewsItem
 import com.example.newsbreak.data.network.NewsListFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -22,35 +25,38 @@ import javax.inject.Inject
 class NewsListPageViewModel @Inject constructor(private val newsListFactory: NewsListFactory) :
     ViewModel() {
 
-    private val _searchQuery = MutableStateFlow("")
-    private val searchQuery = _searchQuery.asStateFlow()
+    private val _newsList = MutableStateFlow<PagingData<NewsItem>>(PagingData.empty())
+    val newsList: StateFlow<PagingData<NewsItem>> = _newsList.asStateFlow()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
-            initialValue = "",
+            initialValue = PagingData.empty(),
         )
 
-    val newsList: Flow<PagingData<NewsItem>> = searchQuery
-        .flatMapLatest { query ->
-            newsListFactory.invoke(query).cachedIn(viewModelScope)
-        }//.stateIn(viewModelScope, SharingStarted.Lazily, snapshotFlow { newsListFactory.invoke("") })
-
-    /*    private val _newsList: MutableStateFlow<PagingData<NewsItem>> = MutableStateFlow()
-        private val newsList = _newsList.asStateFlow()
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = newsListFactory.invoke(""),
-            )*/
-
+    init {
+        viewModelScope.launch {
+            newsListFactory.invoke("").cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _newsList.value = pagingData
+                    println(pagingData)
+                }
+        }
+    }
 
     fun setSearchQuery(query: String) {
-        _searchQuery.value = query
-        /*        newsListFactory.invoke(query).collect { new ->
-                    _newsList.update { new }*/
+        viewModelScope.launch {
+            try {
+                newsListFactory.invoke(query).cachedIn(viewModelScope)
+                    .collectLatest { pagingData ->
+                        _newsList.update { pagingData }
+                    }
+            } catch (e: Exception) {
+                Log.d("SearchError", e.toString())
+
+            }
+        }
     }
 
     val savedNewsList: StateFlow<List<NewsItem>> = newsListFactory.getSavedNewsItem()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
 }
