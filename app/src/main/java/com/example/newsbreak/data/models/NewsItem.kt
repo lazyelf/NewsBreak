@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "news")
 data class NewsItem(
-    @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "author") val author: String?,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String?,
@@ -16,5 +15,7 @@ data class NewsItem(
     @ColumnInfo(name = "published_at") val publishedAt: String,
     @ColumnInfo(name = "content") val content: String?,
     @Embedded(prefix = "source") val source: NewsSource,
+){
+    @PrimaryKey(autoGenerate = true) var id : Int = 0
     @ColumnInfo(name = "is_saved") var isSaved: Boolean = false
-)
+}
