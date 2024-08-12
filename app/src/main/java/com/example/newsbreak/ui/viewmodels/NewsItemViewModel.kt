@@ -2,14 +2,9 @@ package com.example.newsbreak.ui.viewmodels
 
 import android.os.Build
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.newsbreak.data.models.NewsItem
 import com.example.newsbreak.data.network.NewsListFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject

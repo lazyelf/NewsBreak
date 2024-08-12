@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.dp
 import com.example.newsbreak.data.models.NewsItem
-import com.example.newsbreak.ui.viewmodels.NewsListPageViewModel
 import com.example.newsbreak.ui.views.NewsItemView
 
 @Composable
